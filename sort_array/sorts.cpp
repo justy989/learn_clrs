@@ -91,12 +91,15 @@ void sorts::impl_merge_sort( std::vector<T>& input,
                              std::size_t start,
                              std::size_t end )
 {
+    // if start isn't < end, there is only 1 element, so it is sorted
     if( start >= end ){
         return;
     }
 
+    // calculate the mid point
     std::size_t mid = ( start + end ) / 2;
     
+    // recursively merge sort the left and right halfs
     impl_merge_sort( input,
                      start,
                      mid );
@@ -105,6 +108,7 @@ void sorts::impl_merge_sort( std::vector<T>& input,
                      mid + 1,
                      end );
     
+    // merge the two halves together
     impl_merge( input,
                 start,
                 mid,

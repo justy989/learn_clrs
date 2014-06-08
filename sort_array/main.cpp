@@ -8,7 +8,9 @@
 int main()
 {
     uint32_t seed = 1337;
-    size_t n = 70;
+    size_t n = 5000;
+
+    cout << "Generating list of " << n << " random unique values with seed " << seed << endl;
 
     // generate 50 ints, copy them for best and worst input
     auto average_input = utils::generate_unique<int>( seed, n );
@@ -41,17 +43,6 @@ int main()
 
         return true;
     };
-
-
-    // print generated input
-    cout << "Generated input:" << endl;
-
-    for( auto elem : average_input ){
-        cout << elem << " ";
-    }
-
-    cout << endl;
-
     
     // create the tests and run them
     utils::test<decltype(average_input)> is_test ( "Insertion Sort"s,
