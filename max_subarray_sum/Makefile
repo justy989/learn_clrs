@@ -1,11 +1,10 @@
 
 include ../utils/Makefile
 
-all: sort
+all: find_max
 
-sort: main.cpp
+find_max: main.cpp
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
-	rm -f sort
-
+	rm -f find_max
