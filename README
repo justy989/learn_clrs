@@ -1,0 +1,10 @@
+learn_clrs
+==========
+
+Programming examples from "Introduction to Algorithms"
+
+-Each algorithm category has a directory.
+-Run 'make' to build a runnable examples that test best, worst and average cases
+ for eaach algorithm for specified generated input sizes or files containing
+ valid input.
+-Building requires a g++ version that supports C++11 and gnu make
