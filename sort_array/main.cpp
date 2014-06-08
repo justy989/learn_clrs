@@ -8,7 +8,7 @@
 int main()
 {
     uint32_t seed = 1337;
-    size_t n = 500;
+    size_t n = 70;
 
     // generate 50 ints, copy them for best and worst input
     auto average_input = utils::generate_unique<int>( seed, n );
@@ -26,10 +26,9 @@ int main()
     using test_case_lambda = utils::test< decltype(average_input) >::case_func;
     using test_check_lambda = utils::test< decltype(average_input) >::check_func;
 
-    // create our lambdas for each case
-    test_case_lambda best_case = [&best_input](){ sorts::insertion_sort(best_input); return std::ref(best_input); };
-    test_case_lambda average_case = [&average_input](){ sorts::insertion_sort(average_input); return std::ref(average_input); };
-    test_case_lambda worst_case = [&worst_input](){ sorts::insertion_sort(worst_input); return std::ref(worst_input); };
+    // create our lambdas for each case, capture vectors by copying
+    test_case_lambda is = [](decltype(average_input) input){ sorts::insertion_sort(input); return std::ref(input); };
+    test_case_lambda ms = [](decltype(average_input) input){ sorts::merge_sort(input); return std::ref(input); };
 
     // create our lambda to check correctness
     test_check_lambda check_correctness = []( const std::vector<int>& input )
@@ -43,6 +42,7 @@ int main()
         return true;
     };
 
+
     // print generated input
     cout << "Generated input:" << endl;
 
@@ -51,15 +51,25 @@ int main()
     }
 
     cout << endl;
-    
-    // create the test and run it
-    utils::test<decltype(average_input)> is ( "Insertion Sort"s,
-                                              best_case,
-                                              average_case,
-                                              worst_case,
-                                              check_correctness );
 
-    is.run();
+    
+    // create the tests and run them
+    utils::test<decltype(average_input)> is_test ( "Insertion Sort"s,
+                                                   is,
+                                                   best_input,
+                                                   average_input,
+                                                   worst_input,
+                                                   check_correctness );
+
+    utils::test<decltype(average_input)> ms_test ( "Merge Sort"s,
+                                                   ms,
+                                                   best_input,
+                                                   average_input,
+                                                   worst_input,
+                                                   check_correctness );
+
+    is_test.run();
+    ms_test.run();
 
     return 0;
 }

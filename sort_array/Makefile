@@ -1,12 +1,15 @@
 
 CC=g++
-CFLAGS=-std=c++1y -O3 -Wall -Wextra -Werror -DNDEBUG
-EXES=insertion_sort
+CFLAGS=-std=c++1y -Wall -Wextra -Werror -DNDEBUG
 
-all: $(EXES)
+debug: CFLAGS:=$(CFLAGS) -g
+debug: sort
 
-insertion_sort: insertion_sort.cpp
+fast: CFLAGS:=$(CFLAGS) -O3
+fast: sort
+
+sort: main.cpp
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
-	rm -f *.o $(EXES)
+	rm -f *.o sort

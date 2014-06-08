@@ -11,16 +11,17 @@ std::string utils::test<INPUT>::case_names[case_count] = { "Best Case", "Average
 
 template < typename INPUT >
 utils::test<INPUT>::test( const std::string& name,
-                          case_func& best_case,
-                          case_func& average_case,
-                          case_func& worst_case,
+                          case_func& func,
+                          const INPUT& best_input,
+                          const INPUT& average_input,
+                          const INPUT& worst_input,
                           check_func& correctness_check ) :
     m_name { name },
+    m_case_func { func },
+    m_case_inputs { best_input, average_input, worst_input },
     m_correctness_check { correctness_check }
 {
-    m_cases[0] = best_case;
-    m_cases[1] = average_case;
-    m_cases[2] = worst_case;
+
 }
 
 template < typename INPUT >
@@ -34,7 +35,7 @@ void utils::test<INPUT>::run()
         cout << "    Start ... ";
  
         auto start = high_resolution_clock::now();
-        auto output = m_cases[i]();
+        auto output = m_case_func( m_case_inputs[i] );
         auto end = high_resolution_clock::now();
 
         cout << "Stop "
@@ -46,6 +47,7 @@ void utils::test<INPUT>::run()
             cout << "    Correctness Check Failed!" << endl;
         }
     }
+
     cout << "End " << m_name << endl;
 
 }
