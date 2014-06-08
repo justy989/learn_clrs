@@ -24,9 +24,11 @@ namespace utils{
 
         std::string m_name;
 
-        case_func& m_best_case;
-        case_func& m_average_case;
-        case_func& m_worst_case;
+        static constexpr size_t case_count {3};
+
+        static std::string case_names[case_count];
+
+        case_func m_cases[case_count];
         check_func& m_correctness_check;
     };
 }
