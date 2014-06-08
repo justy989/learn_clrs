@@ -13,7 +13,7 @@ int main()
     uint32_t seed = 1337;
     size_t n = 5000;
 
-    cout << "Generating list of " << n << " random unique values with seed " << seed << endl;
+    cout << "Generating list of " << n << " random unique values with seed " << seed << endl << endl;
 
     // generate 50 ints, copy them for best and worst input
     auto average_input = generate_unique<int>( seed, n );
@@ -47,14 +47,16 @@ int main()
         return true;
     };
 
+    using case_info = std::vector< test<decltype(average_input)>::case_info >;
+
     // setup case info. Match Case id to input
-    std::vector< test<decltype(average_input)>::case_info > is_cases {
+    case_info is_cases {
         { "Best Case: O(n)", best_input },
         { "Average Case: O((n/2)^2)", average_input },
         { "Worst Case: O(n^2)", worst_input },            
     };
 
-    std::vector< test<decltype(average_input)>::case_info > ms_cases {
+    case_info ms_cases {
         { "Average Case: O(n lg n)", average_input },
     };
     

@@ -35,7 +35,7 @@ void utils::test<INPUT>::run()
 
         cout << "Stop "
              << duration_cast<nanoseconds>(end - start).count()
-             << " nanoseconds" << endl;
+             << " ns" << endl;
 
         // check correctness
         if( !m_correctness_check( output ) ){
@@ -43,6 +43,5 @@ void utils::test<INPUT>::run()
         }
     }
 
-    cout << "End " << m_name << endl;
-
+    cout << "End " << m_name << endl << endl;
 }
