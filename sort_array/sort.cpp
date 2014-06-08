@@ -1,7 +1,7 @@
-#include "sorts.hpp"
+#include "sort.hpp"
 
 template < typename T > 
-void sorts::insertion_sort( std::vector<T>& input )
+void sort::insertion_sort( std::vector<T>& input )
 {
     auto n = input.size();
 
@@ -31,25 +31,28 @@ void sorts::insertion_sort( std::vector<T>& input )
 }
 
 template < typename T >
-void sorts::impl_merge( std::vector<T>& input,
-                        std::size_t start,
-                        std::size_t mid,
-                        std::size_t end )
+void sort::impl_merge( std::vector<T>& input,
+                       std::size_t start,
+                       std::size_t mid,
+                       std::size_t end )
 {
-    // make 2 arrays for each side to be merged
-    std::vector<T> left( (mid - start) + 1 );
-    std::vector<T> right( end - mid );
+    size_t left_size { (mid - start) + 1 };
+    size_t right_size { end - mid };
+
+    // gcc vlas
+    T left[ left_size ];
+    T right[ right_size ];
 
     std::size_t i { 0 };
     std::size_t j { 0 };
 
     // copy the elements into left and right arrays
     // the algorithm assumes these sub-arrays are sorted
-    for(; i < left.size(); ++i){
+    for(; i < left_size; ++i){
         left[i] = input[ start + i ];
     }
 
-    for(; j < right.size(); ++j){
+    for(; j < right_size; ++j){
         right[j] = input[ mid + j + 1 ];
     }
 
@@ -60,13 +63,13 @@ void sorts::impl_merge( std::vector<T>& input,
     for(std::size_t k = start; k <= end; ++k){
 
         // if either list is empty, add the rest of the other
-        if( i >= left.size() ){
+        if( i >= left_size ){
             input[k] = right[j];
             ++j;
             continue;
         }
 
-        if( j >= right.size() ){
+        if( j >= right_size ){
             input[k] = left[i];
             ++i;
             continue;
@@ -87,9 +90,9 @@ void sorts::impl_merge( std::vector<T>& input,
 }
 
 template < typename T >
-void sorts::impl_merge_sort( std::vector<T>& input,
-                             std::size_t start,
-                             std::size_t end )
+void sort::impl_merge_sort( std::vector<T>& input,
+                            std::size_t start,
+                            std::size_t end )
 {
     // if start isn't < end, there is only 1 element, so it is sorted
     if( start >= end ){
@@ -115,9 +118,8 @@ void sorts::impl_merge_sort( std::vector<T>& input,
                 end );
 }
 
-
 template < typename T >
-void sorts::merge_sort( std::vector<T>& input )
+void sort::merge_sort( std::vector<T>& input )
 {
     impl_merge_sort( input,
                      0,

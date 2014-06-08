@@ -3,7 +3,7 @@
 
 #include <vector>
 
-namespace sorts{
+namespace sort{
     template < typename T > 
     void insertion_sort( std::vector<T>& input );
 
@@ -22,6 +22,6 @@ namespace sorts{
     void merge_sort( std::vector<T>& input );
 }
 
-#include "sorts.cpp"
+#include "sort.cpp"
 
 #endif
