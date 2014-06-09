@@ -16,6 +16,20 @@ namespace find{
     template < typename T >
     answer<T> kadane_find_max_subarray( const std::vector<T>& input );
 
+    template < typename T >
+    answer<T> impl_dac_find_max_crossing_subarray( const std::vector<T>& input,
+                                                   size_t left,
+                                                   size_t mid,
+                                                   size_t right );
+
+    template < typename T >
+    answer<T> impl_dac_find_max_subarray( const std::vector<T>& input,
+                                          size_t left,
+                                          size_t right );
+
+    template < typename T >
+    answer<T> dac_find_max_subarray( const std::vector<T>& input );
+
 }
 
 #include "find_max.cpp"

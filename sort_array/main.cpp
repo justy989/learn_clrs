@@ -19,6 +19,7 @@ int main()
     auto average_input = generate_unique<int>( seed, n );
 
     using input = decltype(average_input);
+    using output = input;
 
     input best_input { average_input };
     input worst_input { average_input };
@@ -31,16 +32,20 @@ int main()
                [](int i, int j){return i > j;} );
 
 
-    using test_case_fn = test< input >::case_func;
-    using test_check_fn = test< input >::check_func;
+    using test_case_fn = test< input, output >::case_func;
+    using test_check_fn = test< input, output >::check_func;
 
     // create our lambdas for each case, capture vectors by copying
     test_case_fn is_fn = [](input input){ insertion_sort(input); return std::move(input); };
     test_case_fn ms_fn = [](input input){ merge_sort(input); return std::move(input); };
 
     // create our lambda to check correctness
-    test_check_fn check_correctness = []( const std::vector<int>& input )
+    test_check_fn check_correctness = []( const input& input, const output& output )
     {
+        if( &input != &output ){
+            return false;
+        }
+
         for(size_t i = 1; i < input.size(); ++i){
             if( input[i - 1] > input[i] ){
                 return false;
@@ -50,7 +55,7 @@ int main()
         return true;
     };
 
-    using case_info = std::vector< test<input>::case_info >;
+    using case_info = std::vector< test< input, output >::case_info >;
 
     // setup case info. Match Case id to input
     case_info is_cases {
@@ -64,15 +69,15 @@ int main()
     };
     
     // create the tests and run them
-    test<input> is_test { "Insertion Sort"s,
-                          is_fn,
-                          check_correctness,
-                          std::move(is_cases) };
+    test<input, output> is_test { "Insertion Sort"s,
+                                  is_fn,
+                                  check_correctness,
+                                  std::move(is_cases) };
 
-    test<input> ms_test { "Merge Sort"s,
-                          ms_fn,
-                          check_correctness,
-                          std::move(ms_cases) };
+    test<input, output> ms_test { "Merge Sort"s,
+                                  ms_fn,
+                                  check_correctness,
+                                  std::move(ms_cases) };
 
     is_test.run();
     ms_test.run();

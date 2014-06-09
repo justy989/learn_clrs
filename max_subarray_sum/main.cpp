@@ -1,4 +1,4 @@
-//#include "../utils/test.hpp"
+#include "../utils/test.hpp"
 #include "../utils/generate.hpp"
 #include "find_max.hpp"
 
@@ -18,24 +18,43 @@ int main()
     auto values = generate_unique<int>( seed, n );
     
     using input = decltype(values);
+    using output = find::answer<int>;
 
     input deltas ( values.size() - 1, 0 );
 
+    // calculate the deltas between values. use these for input
     for( size_t i = 0; i < deltas.size(); i++){
         deltas[i] = values[ i + 1 ] - values[ i ];
     }
 
-    for( auto elem : deltas ){
-        cout << elem << " ";
-    }
+    using test_case_fn = test< input, output >::case_func;
+    using test_check_fn = test< input, output >::check_func;
 
-    cout << endl;
+    // create lambdas for test use
+    test_case_fn dac_fn = [](const input& input){ return find::dac_find_max_subarray(input); };
 
-    auto ans = find::kadane_find_max_subarray( deltas );
+    test_check_fn check_correctness = [](const input& input,
+                                         const output& output){
+        auto correct_ans = find::dac_find_max_subarray( input );
+        return ( correct_ans.sum == output.sum &&
+                 correct_ans.left == output.left &&
+                 correct_ans.right == output.right );
+    };
 
-    cout << "Left:  " << ans.left << endl;
-    cout << "Right: " << ans.right << endl;
-    cout << "Sum:   " << ans.sum << endl;
+    using case_info = std::vector< test<input, output>::case_info >;
+
+    // create cases
+    case_info dac_cases {
+        { "Average Case: n lg n", deltas }
+    };
+
+    // construct and run tests
+    test<input, output> dac_test { "DAC Find Max SubArray"s,
+                                   dac_fn,
+                                   check_correctness,
+                                   std::move(dac_cases) };
+
+    dac_test.run();
 
     cout << endl;
 
