@@ -10,7 +10,7 @@ using namespace std;
 int main()
 {
     uint32_t seed = 1337;
-    size_t n = 15;
+    size_t n = 5000;
 
     cout << "Generating list of " << n << " random unique values with seed " << seed << endl << endl;
 
