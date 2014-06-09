@@ -10,7 +10,7 @@ namespace utils{
     template < typename INPUT, typename OUTPUT >
     class test{
     public:
-        using case_func = std::function< OUTPUT(INPUT) >;
+        using case_func = std::function< OUTPUT(INPUT&) >;
         using check_func = std::function< bool(const INPUT&, const OUTPUT&) >;
 
         struct case_info{

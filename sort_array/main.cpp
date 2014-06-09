@@ -5,21 +5,23 @@
 #include <iostream>
 #include <algorithm>
 
-using namespace utils;
 using namespace sort;
 
 int main()
 {
     uint32_t seed = 1337;
-    size_t n = 50;
+    size_t n = 5000;
 
     cout << "Generating list of " << n << " random unique values with seed " << seed << endl << endl;
 
     // generate 50 ints, copy them for best and worst input
-    auto average_input = generate_unique<int>( seed, n );
+    auto average_input = utils::generate_unique<int>( seed, n );
 
     using input = decltype(average_input);
     using output = input;
+    using test = utils::test< input, output >;
+    using case_info = std::vector< test::case_info >;
+
 
     input best_input { average_input };
     input worst_input { average_input };
@@ -32,15 +34,12 @@ int main()
                [](int i, int j){return i > j;} );
 
 
-    using test_case_fn = test< input, output >::case_func;
-    using test_check_fn = test< input, output >::check_func;
-
     // create our lambdas for each case, capture vectors by copying
-    test_case_fn is_fn = [](input input){ insertion_sort(input); return std::move(input); };
-    test_case_fn ms_fn = [](input input){ merge_sort(input); return std::move(input); };
+    test::case_func is_fn = [](input input){ insertion_sort(input); return std::move(input); };
+    test::case_func ms_fn = [](input input){ merge_sort(input); return std::move(input); };
 
     // create our lambda to check correctness
-    test_check_fn check_correctness = []( const input& input, const output& output )
+    test::check_func check_correctness = []( const input& input, const output& output )
     {
         if( input.size() != output.size() ){
             return false;
@@ -55,7 +54,6 @@ int main()
         return true;
     };
 
-    using case_info = std::vector< test< input, output >::case_info >;
 
     // setup case info. Match Case id to input
     case_info is_cases {
@@ -67,17 +65,18 @@ int main()
     case_info ms_cases {
         { "Average Case: n lg n", average_input },
     };
+
     
     // create the tests and run them
-    test<input, output> is_test { "Insertion Sort"s,
-                                  is_fn,
-                                  check_correctness,
-                                  std::move(is_cases) };
+    test is_test { "Insertion Sort"s,
+                   is_fn,
+                   check_correctness,
+                   std::move(is_cases) };
 
-    test<input, output> ms_test { "Merge Sort"s,
-                                  ms_fn,
-                                  check_correctness,
-                                  std::move(ms_cases) };
+    test ms_test { "Merge Sort"s,
+                   ms_fn,
+                   check_correctness,
+                   std::move(ms_cases) };
 
     is_test.run();
     ms_test.run();
