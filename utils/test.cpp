@@ -39,7 +39,7 @@ void utils::test<INPUT, OUTPUT>::run()
     for(size_t i = 0; i < m_cases.size(); ++i){
         // run and time the best case
         cout << "  " << m_cases[i].id << endl;
-        cout << "    Start ... ";
+        cout << "    Running ... ";
  
         auto start = high_resolution_clock::now();
 
@@ -47,13 +47,17 @@ void utils::test<INPUT, OUTPUT>::run()
 
         auto end = high_resolution_clock::now();
 
-        cout << "Stop "
+        cout << "Done: "
              << duration_cast<nanoseconds>(end - start).count()
              << " ns" << endl;
 
+        cout << "    Checking Correctness ... ";
+
         // check correctness
         if( !m_correctness_check( m_cases[i].input, output ) ){
-            cout << "    Correctness Check Failed!" << endl;
+            cout << "FAILED" << endl;
+        }else{
+            cout << "Success" << endl;
         }
     }
 
