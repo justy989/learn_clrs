@@ -11,7 +11,7 @@ using namespace sort;
 int main()
 {
     uint32_t seed = 1337;
-    size_t n = 5000;
+    size_t n = 50;
 
     cout << "Generating list of " << n << " random unique values with seed " << seed << endl << endl;
 
@@ -42,12 +42,12 @@ int main()
     // create our lambda to check correctness
     test_check_fn check_correctness = []( const input& input, const output& output )
     {
-        if( &input != &output ){
+        if( input.size() != output.size() ){
             return false;
         }
 
-        for(size_t i = 1; i < input.size(); ++i){
-            if( input[i - 1] > input[i] ){
+        for(size_t i = 1; i < output.size(); ++i){
+            if( output[i - 1] > output[i] ){
                 return false;
             } 
         }

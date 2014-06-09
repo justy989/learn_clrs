@@ -22,14 +22,14 @@ utils::test<INPUT, OUTPUT>::test( const std::string& name,
 
 }
 
-template < typename T >
-std::string format_ns_with_commas(T count)
-{
-    std::stringstream ss;
-    ss.imbue(std::locale("en_US"));
-    ss << std::fixed << count;
-    return ss.str();
-}
+// template < typename T >
+// std::string format_ns_with_commas(T count)
+// {
+//     std::stringstream ss;
+//     ss.imbue(std::locale("en_US"));
+//     ss << std::fixed << count;
+//     return ss.str();
+// }
 
 template < typename INPUT, typename OUTPUT >
 void utils::test<INPUT, OUTPUT>::run()
@@ -48,8 +48,7 @@ void utils::test<INPUT, OUTPUT>::run()
         auto end = high_resolution_clock::now();
 
         cout << "Stop "
-             << format_ns_with_commas( 
-                 duration_cast<nanoseconds>(end - start).count() )
+             << duration_cast<nanoseconds>(end - start).count()
              << " ns" << endl;
 
         // check correctness
