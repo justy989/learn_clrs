@@ -14,6 +14,9 @@ namespace find{
     };
 
     template < typename T >
+    answer<T> bf_find_max_subarray( const std::vector<T>& input );
+
+    template < typename T >
     answer<T> kadane_find_max_subarray( const std::vector<T>& input );
 
     template < typename T >

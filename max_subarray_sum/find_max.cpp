@@ -1,6 +1,39 @@
 #include "find_max.hpp"
 
 template < typename T >
+find::answer<T> find::bf_find_max_subarray( const std::vector<T>& input )
+{
+    if(input.size() <= 0){
+        return answer<T>{ 0, 0, T{} };
+    }
+
+    answer<T> ans { 0, 0, input[0] };
+
+    // brute force approach
+    for(size_t i = 0; i < input.size(); ++i){
+        for(size_t j = i + 1; j <= input.size(); ++j){
+
+            // start with an empty sum
+            T sum {};
+
+            // loop over every possible range
+            for(size_t k = i; k <= j; ++k){
+                sum += input[k];
+            }
+
+            // if we found a new greater sum, save it
+            if( sum > ans.sum ){
+                ans.sum = sum;
+                ans.left = i;
+                ans.right = j;
+            }
+        }
+    }
+    
+    return ans;
+}
+
+template < typename T >
 find::answer<T> find::kadane_find_max_subarray( const std::vector<T>& input )
 {
     if(input.size() <= 0){
@@ -12,14 +45,20 @@ find::answer<T> find::kadane_find_max_subarray( const std::vector<T>& input )
     T check_sum = ans.sum;
     size_t check_left = 0;
 
-    for(size_t i = 0; i < input.size(); ++i){
+    // loop over the input
+    for(size_t i = 1; i < input.size(); ++i){
+
+        // if the value is positive save it's starting location
+        // and set it as a potential candidate
         if(check_sum < 0){
             check_sum = input[i];
             check_left = i;
-        }else{
+        }else{ // otherwise continue adding
             check_sum += input[i];
         }
 
+        // if the sum gets larger than what we have found
+        // so far, then save it
         if( check_sum > ans.sum ){
             ans.sum = check_sum;
             ans.left = check_left;
@@ -42,6 +81,7 @@ find::answer<T> find::impl_dac_find_max_crossing_subarray( const std::vector<T>&
 
     T sum {};
 
+    // find the max sum of the left side
     for(size_t i = mid; i > left; --i){
         sum += input[i];
         if( sum > left_sum ){
@@ -52,6 +92,7 @@ find::answer<T> find::impl_dac_find_max_crossing_subarray( const std::vector<T>&
 
     sum = {};
 
+    // find the sum of the right side
     for(size_t i = mid + 1; i <= right; ++i){
         sum += input[i];
         if( sum > right_sum ){
@@ -60,6 +101,7 @@ find::answer<T> find::impl_dac_find_max_crossing_subarray( const std::vector<T>&
         }
     }
 
+    // add them together for the crossing
     ans.sum = right_sum + left_sum;
 
     return ans;
