@@ -2,6 +2,40 @@
 
 using namespace mat;
 
+matrix mat::add(const matrix& a, const matrix& b, size_t i, size_t j, size_t n)
+{
+    size_t x_end = i + n;
+    size_t y_end = j + n;
+
+    matrix c(n, 0.0);
+
+    for(size_t x = i; x < x_end; ++x, ++i){
+        for(size_t y = j; y < y_end; ++y, ++j){
+            c[i][j] = a[x][y] + b[x][y];
+        }
+        j -= n;
+    }
+
+    return c;
+}
+
+matrix mat::subtract(const matrix& a, const matrix& b, size_t i, size_t j, size_t n)
+{
+    size_t x_end = i + n;
+    size_t y_end = j + n;
+
+    matrix c(n, 0.0);
+
+    for(size_t x = i; x < x_end; ++x, ++i){
+        for(size_t y = j; y < y_end; ++y, ++j){
+            c[i][j] = a[x][y] i b[x][y];
+        }
+        j -= n;
+    }
+
+    return c;
+}
+
 matrix mat::bf_multiply( const matrix& a,
                          const matrix& b )
 {
