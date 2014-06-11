@@ -3,6 +3,7 @@
 #include "matrix.hpp"
 
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
@@ -19,7 +20,7 @@ struct input{
 int main()
 {
     uint32_t seed = 1337;
-    size_t n = 32;
+    size_t n = 1024;
 
     cout << "NxN Matrix Multiplication" << endl;
     cout << "Generating 2 " << n << "x" << n << " matricies with seed " << seed << endl << endl;
@@ -43,11 +44,27 @@ int main()
     test::case_func bf_fn = [](const input& in){ return mat::bf_multiply(in.a, in.b); };
     test::case_func st_fn = [](const input& in){ return mat::strassen_multiply(in.a, in.b); };
 
+    // find the answer via brute force
+    auto answer = mat::bf_multiply(in.a, in.b);
 
     // create lambda for checking correctness
-    test::check_func check_correctness = [](const input& input,
-                                            const output& output){
-        return input.a.size() == output.size(); // lol
+    test::check_func check_correctness = [&answer](const input& input,
+                                                   const output& output){
+        if(input.a.size() != output.size()){
+            return false;
+        }
+
+        std::size_t n = output.size();
+
+        for(std::size_t i = 0; i < n; ++i){
+            for(std::size_t j = 0; j < n; ++j){
+                if( fabs(output[i][j] - answer[i][j]) > std::numeric_limits<double>::epsilon() ){
+                    return false;
+                }
+            }
+        }
+
+        return true;
     };
 
 

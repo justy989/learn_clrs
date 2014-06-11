@@ -8,9 +8,9 @@ matrix mat::add( const matrix& a, const matrix& b )
 
     matrix c(n, std::vector<double>(n, 0.0));
 
-    for(std::size_t x = 0; x < n; ++x){
-        for(std::size_t y = 0; y < n; ++y){
-            c[x][y] = a[x][y] + b[x][y];
+    for(std::size_t i = 0; i < n; ++i){
+        for(std::size_t j = 0; j < n; ++j){
+            c[i][j] = a[i][j] + b[i][j];
         }
     }
 
@@ -23,9 +23,9 @@ matrix mat::subtract( const matrix& a, const matrix& b )
 
     matrix c(n, std::vector<double>(n, 0.0));
 
-    for(std::size_t x = 0; x < n; ++x){
-        for(std::size_t y = 0; y < n; ++y){
-            c[x][y] = a[x][y] + b[x][y];
+    for(std::size_t i = 0; i < n; ++i){
+        for(std::size_t j = 0; j < n; ++j){
+            c[i][j] = a[i][j] - b[i][j];
         }
     }
 
@@ -44,7 +44,7 @@ matrix mat::bf_multiply( const matrix& a,
             c[i][j] = 0.0;
 
             for(std::size_t k = 0; k < n; ++k){
-                c[i][j] += c[i][j] + a[i][k] * b[k][j];
+                c[i][j] = c[i][j] + ( a[i][k] * b[k][j] );
             }
         }
     }
@@ -103,8 +103,8 @@ matrix mat::strassen_multiply( const matrix& a, const matrix& b )
 
     // build the answers
     matrix pc[2][2] {
-        { add( subtract( add( s[1], s[2] ), s[4] ), s[6] ), add( s[4], s[5] ) },
-        { add( s[6], s[7] ), subtract( add( subtract( s[2], s[3] ), s[5] ), s[7] ) }
+        { add( subtract( add( s[0], s[1] ), s[3] ), s[5] ), add( s[3], s[4] ) },
+        { add( s[5], s[4] ), subtract( add( subtract( s[1], s[2] ), s[4] ), s[6] ) }
     };
 
     // copy them into the big matrix
@@ -115,9 +115,9 @@ matrix mat::strassen_multiply( const matrix& a, const matrix& b )
             std::size_t next_i = next_n + i;
             std::size_t next_j = next_n + j;
 
-            c[i][j] = pc[0][0][i][j];
-            c[next_i][j] = pc[1][0][i][j];
-            c[i][next_j] = pc[0][1][i][j];
+            c[i][j]           = pc[0][0][i][j];
+            c[next_i][j]      = pc[1][0][i][j];
+            c[i][next_j]      = pc[0][1][i][j];
             c[next_i][next_j] = pc[1][1][i][j];
         }
     }
