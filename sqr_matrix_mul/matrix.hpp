@@ -1,17 +1,38 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include <vector>
+#include <cstdint>
 
 namespace mat{
-    using matrix = std::vector< std::vector< double > >;
+    using uint = uint32_t;
+    using element_type = double;
+    using matrix = element_type*;
 
-    matrix add( const matrix& a, const matrix& b );
-    matrix subtract( const matrix& a, const matrix& b );
+    inline constexpr uint size( uint n ) { return n * n; }
 
-    matrix bf_multiply( const matrix& a, const matrix& b );
+    inline element_type element(const matrix m,
+                                uint n,
+                                uint i,
+                                uint j )
+    {
+        return m[ (j * n) + i ];
+    }
 
-    matrix strassen_multiply( const matrix& a, const matrix& b );
+    inline void set( matrix m,
+                     uint n,
+                     uint i,
+                     uint j,
+                     element_type value )
+    {
+        m[ (j * n) + i ] = value;
+    }
+    
+    void add( const matrix a, const matrix b, matrix c, uint n );
+    void subtract( const matrix a, const matrix b, matrix c, uint n );
+
+    void bf_multiply( const matrix a, const matrix b, matrix c, uint n );
+
+    void strassen_multiply( const matrix a, const matrix b, matrix c, uint n );
 };
 
 #endif
