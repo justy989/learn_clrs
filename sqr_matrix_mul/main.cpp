@@ -41,6 +41,8 @@ int main()
 
     // create lambdas for test use
     test::case_func bf_fn = [](const input& in){ return mat::bf_multiply(in.a, in.b); };
+    test::case_func st_fn = [](const input& in){ return mat::strassen_multiply(in.a, in.b); };
+
 
     // create lambda for checking correctness
     test::check_func check_correctness = [](const input& input,
@@ -54,6 +56,9 @@ int main()
         { "Average Case: n^3", in }
     };
 
+    case_info st_cases {
+        { "Average Case: n^log7", in }
+    };
 
     // construct and run tests
     test bf_test { "Brute Force"s,
@@ -61,7 +66,13 @@ int main()
                    check_correctness,
                    std::move(bf_cases) };
 
+    test st_test { "Strassen"s,
+                   st_fn,
+                   check_correctness,
+                   std::move(st_cases) };
+
     bf_test.run();
+    st_test.run();
 
     cout << endl;
 
