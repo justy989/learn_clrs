@@ -4,6 +4,9 @@
 #include <vector>
 
 namespace sort{
+    template < typename T >
+    void bubble_sort( std::vector<T>& input );
+
     template < typename T > 
     void insertion_sort( std::vector<T>& input );
 

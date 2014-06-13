@@ -1,5 +1,23 @@
 #include "sort.hpp"
 
+template < typename T >
+void sort::bubble_sort( std::vector<T>& input )
+{
+    auto end = input.size() - 1;
+    size_t swap_count = 0;
+    
+    do{
+        swap_count = 0;
+        for(std::size_t i = 0; i < end; ++i){
+            auto next_i = i + 1;
+            if( input[i] > input[next_i] ){
+                std::swap( input[i], input[next_i]);
+                ++swap_count;
+            }
+        }
+    } while( swap_count );
+}
+
 template < typename T > 
 void sort::insertion_sort( std::vector<T>& input )
 {

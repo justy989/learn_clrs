@@ -35,6 +35,7 @@ int main()
 
 
     // create our lambdas for each case, capture vectors by copying
+    test::case_func b_fn = [](input input){ bubble_sort(input); return std::move(input); };
     test::case_func is_fn = [](input input){ insertion_sort(input); return std::move(input); };
     test::case_func ms_fn = [](input input){ merge_sort(input); return std::move(input); };
 
@@ -56,6 +57,12 @@ int main()
 
 
     // setup case info. Match Case id to input
+    case_info b_cases {
+        { "Best Case: n", best_input },
+        { "Average Case: (n/2)^2", average_input },
+        { "Worst Case: n^2", worst_input },            
+    };
+
     case_info is_cases {
         { "Best Case: n", best_input },
         { "Average Case: (n/2)^2", average_input },
@@ -68,6 +75,11 @@ int main()
 
     
     // create the tests and run them
+    test b_test { "Bubble Sort"s,
+                   b_fn,
+                   check_correctness,
+                   std::move(b_cases) };
+
     test is_test { "Insertion Sort"s,
                    is_fn,
                    check_correctness,
@@ -78,6 +90,7 @@ int main()
                    check_correctness,
                    std::move(ms_cases) };
 
+    b_test.run();
     is_test.run();
     ms_test.run();
 
